@@ -35,7 +35,7 @@ void button_click(int value, int* coinCount, int* coinCounter,
   *buttonFlag = 0;
 }
 
-void get_category(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
+void get_coin_category(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
                   int* buttonFlag, uint32_t* lastCoinTime) {
   uint32_t currentTime = millis();
   if (!(*buttonFlag) && currentTime - *lastCoinTime >=
@@ -56,21 +56,6 @@ void get_category(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
   }
 }
 
-// Initialize hardware and peripherals
-void initialize_hardware() {
-  button_configuration();
-  millis_init();
-  sei();
-  lcd_init();
-  lcd_enable_cursor();
-}
-
-void initialize_message() {
-  lcd_puts("Money box:");
-  lcd_set_cursor(0, 1);
-  lcd_puts("Coin (1,5,10,25)");
-}
-
 void update_coin_category(int lastClickedCoin, int coinValues[NUM_BUTTONS],
                           int categoryCounts[NUM_BUTTONS]) {
   // Category index for clicked coin
@@ -88,28 +73,43 @@ void update_coin_category(int lastClickedCoin, int coinValues[NUM_BUTTONS],
   }
 }
 
+// Initialize hardware and peripherals
+void initialize_hardware() {
+  button_configuration();
+  millis_init();
+  sei();
+  lcd_init();
+  lcd_enable_cursor();
+}
+
+void initialize_message() {
+  lcd_puts("Money box:");
+  lcd_set_cursor(0, 1);
+  lcd_puts("Coin (1,5,10,25)");
+}
+
 void main_loop() {
 
-  // variables
-  int coinCounter = 0;
-  int coinCount = 0;
-  int systemOn = 1;
-  int coinValues[NUM_BUTTONS] = {1, 5, 10, 25};
-  int buttonFlag = 1;                // flag on button click
-  uint32_t lastCoinTime = millis();  // Track time of last coin press
-
-  // Initialize last clicked coin value
-  int lastClickedCoin = -1;
-  int categoryCounts[NUM_BUTTONS] = {0};  // Initialize to all zeros
+  // ** variables
+  int systemOn = 1;                               // system state { 0 - off, 1 - on }
+  int coinTotalValue = 0;                         // value of coins
+  int coinQuantity = 0;                           // num of coins 
+  int coinQuantityCount[NUM_BUTTONS] = {0};       // num of coin variants
+  int coinValues[NUM_BUTTONS] = {1, 5, 10, 25};   // pre-defined value of coin category
+  int lastClickedCoin = -1;                       // -
+  uint32_t lastCoinTime = millis();               // time of last coin press
+  int buttonFlag = 1;                             // flag on button click
+  
 
   while (1) {
     if (systemOn) {
       for (int i = 0; i < NUM_BUTTONS; i++) {
         if (bit_is_clear(PINB, BUTTON_PIN_1 + i)) {
-          button_click(coinValues[i], &coinCount, &coinCounter,
+          button_click(coinValues[i], &coinQuantity, &coinTotalValue,
                               &buttonFlag, &lastCoinTime);
+
           lastClickedCoin = coinValues[i];
-          update_coin_category(lastClickedCoin, coinValues, categoryCounts);
+          update_coin_category(lastClickedCoin, coinValues, coinQuantityCount);
         }
       }
     }
@@ -124,12 +124,13 @@ void main_loop() {
 
     lcd_set_cursor(0, 1);
 
-    // display count categories after "4" seconds
+    // display coin categories after "4" seconds
     if (!buttonFlag) {
-      get_category(categoryCounts, lastClickedCoin, &buttonFlag, &lastCoinTime);
+      get_coin_category(coinQuantityCount, lastClickedCoin, &buttonFlag, &lastCoinTime);
     }
   }
 }
+
 
 int main(void) {
   initialize_hardware();
