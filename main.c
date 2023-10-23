@@ -4,69 +4,55 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <string.h>
+
+// config files
 #include "lcd.h"
+#include "millis.h"
 
 // header files
 #include "button.h"
 #include "system.h"
 
-#define BIT_SET(a, b) ((a) |= (1ULL << (b)))
-#define BIT_CLEAR(a,b) ((a) &= ~(1ULL<<(b)))
-#define BIT_FLIP(a,b) ((a) ^= (1ULL<<(b)))
-#define BIT_CHECK(a,b) (!!((a) & (1ULL<<(b)))) 
-
-// B (digital pin 8 to 13)
-// C (analog input pins)
-// D (digital pins 0 to 7)
-// https://wokwi.com/projects/379402088569472001
-
-char currentText[5] = {0};
-int coinCounter = 0; // coin counter
-int coinCount = 0;   // num of coins
-int systemOn = 1;     // System state (1 = on, 0 = off)
-
-void HandleButtonClick(char *txt, int value) {
+// Function to handle button click
+void HandleButtonClick(int value, int *coinCount, int *coinCounter) {
     _delay_ms(200);
-    strcat(currentText, txt);
     lcd_clear();
     lcd_set_cursor(0, 1);
 
-    //lcd_clear();  // clear
-    lcd_puts(txt); // show pressed number
-    coinCounter += value; // Increment sum
-    coinCount++;          // Increment number
+    *coinCounter += value;
+    (*coinCount)++;
+
     lcd_set_cursor(0, 0);
-    lcd_printf("%d Coin(s)", coinCount);
+    lcd_printf("%d Coin(s)", *coinCount);
     lcd_set_cursor(0, 1);
-    lcd_printf("Total: %d SEK", coinCounter);
+    lcd_printf("Total: %d SEK", *coinCounter);
 }
 
-int main(void) {
+// Initialize hardware and peripherals
+void InitializeHardware() {
     configureButtons();
-
     millis_init();
     sei();
-
     lcd_init();
-    //lcd_enable_blinking();
     lcd_enable_cursor();
     lcd_puts("Money box:");
     lcd_set_cursor(0, 1);
     lcd_puts("Coin (1,5,10,25)");
+}
+
+// Main loop
+void MainLoop() {
+    int coinCounter = 0;
+    int coinCount = 0;
+    int systemOn = 1;
+    int coinValues[NUM_BUTTONS] = {1, 5, 10, 25};
 
     while (1) {
         if (systemOn) {
-            if (bit_is_clear(PINB, BUTTON_PIN_1)) {
-                HandleButtonClick("1", 1);
-            }
-            if (bit_is_clear(PINB, BUTTON_PIN_2)) {
-                HandleButtonClick("2", 5);
-            }
-            if (bit_is_clear(PINB, BUTTON_PIN_3)) {
-                HandleButtonClick("3", 10);
-            }
-            if (bit_is_clear(PINB, BUTTON_PIN_4)) {
-                HandleButtonClick("4", 25);
+            for (int i = 0; i < NUM_BUTTONS; i++) {
+                if (bit_is_clear(PINB, BUTTON_PIN_1 + i)) {
+                    HandleButtonClick(coinValues[i], &coinCount, &coinCounter);
+                }
             }
         }
 
@@ -76,10 +62,16 @@ int main(void) {
 
         if (bit_is_clear(PINB, BUTTON_PIN_TOGGLE)) {
             toggle_system(&systemOn);
-            _delay_ms(500); // Delay to prevent immediate toggle back
+            _delay_ms(500);
         }
 
         lcd_set_cursor(0, 1);
     }
+}
+
+int main(void) {
+    InitializeHardware();
+    MainLoop();
+
     return 0;
 }

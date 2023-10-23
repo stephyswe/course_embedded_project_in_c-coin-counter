@@ -10,5 +10,6 @@ void configureButtons();
 #define BUTTON_PIN_4 3
 #define BUTTON_PIN_RESET 4
 #define BUTTON_PIN_TOGGLE 5
+#define NUM_BUTTONS 4
 
 #endif
