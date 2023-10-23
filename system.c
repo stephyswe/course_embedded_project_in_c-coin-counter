@@ -4,14 +4,14 @@
 
 #include "lcd.h"
 
-void software_reset() {
+void system_reset() {
   lcd_clear();
   wdt_enable(WDTO_15MS);  // Enable the Watchdog Timer with a short timeout
   while (1)
     ;  // Wait for the watchdog timer to reset the microcontroller
 }
 
-void toggle_system(int* systemOn) {
+void system_toggle(int* systemOn) {
   if (*systemOn) {
     *systemOn = 0;  // Turn off
     lcd_clear();
@@ -23,6 +23,6 @@ void toggle_system(int* systemOn) {
     lcd_clear();
     lcd_puts("SYSTEM ON");
     _delay_ms(2000);
-    software_reset();
+    system_reset();
   }
 }

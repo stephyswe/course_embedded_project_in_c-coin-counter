@@ -13,11 +13,9 @@
 #include "button.h"
 #include "system.h"
 
-#define COIN_WAIT_TIME_MS 4000
-
 // Function to handle button click
-void HandleButtonClick(int value, int* coinCount, int* coinCounter,
-                       int* buttonFlag, uint32_t* lastCoinTime) {
+void button_click(int value, int* coinCount, int* coinCounter,
+                         int* buttonFlag, uint32_t* lastCoinTime) {
   _delay_ms(200);
   lcd_clear();
   lcd_set_cursor(0, 1);
@@ -37,8 +35,8 @@ void HandleButtonClick(int value, int* coinCount, int* coinCounter,
   *buttonFlag = 0;
 }
 
-void displayCategory(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
-                     int* buttonFlag, uint32_t* lastCoinTime) {
+void get_category(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
+                  int* buttonFlag, uint32_t* lastCoinTime) {
   uint32_t currentTime = millis();
   if (!(*buttonFlag) && currentTime - *lastCoinTime >=
                             COIN_WAIT_TIME_MS) {  // 4 seconds have passed
@@ -59,22 +57,22 @@ void displayCategory(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
 }
 
 // Initialize hardware and peripherals
-void InitializeHardware() {
-  configureButtons();
+void initialize_hardware() {
+  button_configuration();
   millis_init();
   sei();
   lcd_init();
   lcd_enable_cursor();
 }
 
-void initMessage() {
+void initialize_message() {
   lcd_puts("Money box:");
   lcd_set_cursor(0, 1);
   lcd_puts("Coin (1,5,10,25)");
 }
 
-void updateCoinCategory(int lastClickedCoin, int coinValues[NUM_BUTTONS],
-                        int categoryCounts[NUM_BUTTONS]) {
+void update_coin_category(int lastClickedCoin, int coinValues[NUM_BUTTONS],
+                          int categoryCounts[NUM_BUTTONS]) {
   // Category index for clicked coin
   int categoryIndex = -1;
   for (int j = 0; j < NUM_BUTTONS; j++) {
@@ -90,7 +88,7 @@ void updateCoinCategory(int lastClickedCoin, int coinValues[NUM_BUTTONS],
   }
 }
 
-void MainLoop() {
+void main_loop() {
 
   // variables
   int coinCounter = 0;
@@ -108,36 +106,35 @@ void MainLoop() {
     if (systemOn) {
       for (int i = 0; i < NUM_BUTTONS; i++) {
         if (bit_is_clear(PINB, BUTTON_PIN_1 + i)) {
-          HandleButtonClick(coinValues[i], &coinCount, &coinCounter,
-                            &buttonFlag, &lastCoinTime);
+          button_click(coinValues[i], &coinCount, &coinCounter,
+                              &buttonFlag, &lastCoinTime);
           lastClickedCoin = coinValues[i];
-          updateCoinCategory(lastClickedCoin, coinValues, categoryCounts);
+          update_coin_category(lastClickedCoin, coinValues, categoryCounts);
         }
       }
     }
 
     if (bit_is_clear(PINB, BUTTON_PIN_RESET)) {
-      software_reset();
+      system_reset();
     }
 
     if (bit_is_clear(PINB, BUTTON_PIN_TOGGLE)) {
-      toggle_system(&systemOn);
+      system_toggle(&systemOn);
     }
 
     lcd_set_cursor(0, 1);
 
     // display count categories after "4" seconds
     if (!buttonFlag) {
-      displayCategory(categoryCounts, lastClickedCoin, &buttonFlag,
-                      &lastCoinTime);
+      get_category(categoryCounts, lastClickedCoin, &buttonFlag, &lastCoinTime);
     }
   }
 }
 
 int main(void) {
-  InitializeHardware();
-  initMessage();
-  MainLoop();
+  initialize_hardware();
+  initialize_message();
+  main_loop();
 
   return 0;
 }

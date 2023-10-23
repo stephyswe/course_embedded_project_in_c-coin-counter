@@ -1,7 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-void software_reset();
-void toggle_system(int* systemOn);
+void system_reset();
+void system_toggle(int* systemOn);
 
 #endif
