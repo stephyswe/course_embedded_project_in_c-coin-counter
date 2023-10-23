@@ -13,6 +13,8 @@
 #include "button.h"
 #include "system.h"
 
+#define COIN_WAIT_TIME_MS 4000
+
 // Function to handle button click
 void HandleButtonClick(int value, int *coinCount, int *coinCounter, int *buttonFlag, uint32_t *lastCoinTime) {
     _delay_ms(200);
@@ -36,7 +38,7 @@ void HandleButtonClick(int value, int *coinCount, int *coinCounter, int *buttonF
 
 void displayCategory(int categoryCounts[NUM_BUTTONS], int lastClickedCoin, int *buttonFlag, uint32_t *lastCoinTime) {
     uint32_t currentTime = millis();
-    if (!(*buttonFlag) && currentTime - *lastCoinTime >= 4000) { // 4 seconds have passed
+    if (!(*buttonFlag) && currentTime - *lastCoinTime >= COIN_WAIT_TIME_MS) { // 4 seconds have passed
         lcd_clear();
         lcd_set_cursor(0, 0);
 
@@ -60,13 +62,18 @@ void InitializeHardware() {
     sei();
     lcd_init();
     lcd_enable_cursor();
+}
+
+void initMessage() {
     lcd_puts("Money box:");
     lcd_set_cursor(0, 1);
     lcd_puts("Coin (1,5,10,25)");
 }
 
-// Main loop
+
 void MainLoop() {
+    
+    // variables
     int coinCounter = 0;
     int coinCount = 0;
     int systemOn = 1;
@@ -112,7 +119,7 @@ void MainLoop() {
 
         lcd_set_cursor(0, 1);
 
-        // Check if it's time to display "Random"
+        // display count categories after "4" seconds
         if (!buttonFlag) {
             displayCategory(categoryCounts, lastClickedCoin, &buttonFlag, &lastCoinTime);
         }
@@ -121,6 +128,7 @@ void MainLoop() {
 
 int main(void) {
     InitializeHardware();
+    initMessage();
     MainLoop();
 
     return 0;
