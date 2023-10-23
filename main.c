@@ -21,11 +21,13 @@
 #define BUTTON_PIN_2 1
 #define BUTTON_PIN_3 2
 #define BUTTON_PIN_4 3
-#define BUTTON_PIN_5 4
+#define BUTTON_PIN_RESET 4
+#define BUTTON_PIN_TOGGLE 5
 
 char currentText[5] = {0};
 int coinCounter = 0; // coin counter
 int coinCount = 0;   // num of coins
+int systemOn = 1;     // System state (1 = on, 0 = off)
 
 void configureButtonPin(uint8_t pin) {
     DDRB &= ~(1 << pin);   // button input
@@ -49,12 +51,25 @@ void HandleButtonClick(char *txt, int value) {
 }
 
 void software_reset() {
+    lcd_clear();
     wdt_enable(WDTO_15MS);  // Enable the Watchdog Timer with a short timeout
     while (1);              // Wait for the watchdog timer to reset the microcontroller
 }
 
-void HandleReset() {
-    lcd_puts("Money box:");
+void toggle_system() {
+    if (systemOn) {
+        systemOn = 0; // Turn off
+        lcd_clear();
+        lcd_puts("SYSTEM OFF");
+        _delay_ms(1000);
+        lcd_clear();
+    } else {
+        systemOn = 1; // Turn on
+        lcd_clear();
+        lcd_puts("SYSTEM ON");
+        _delay_ms(2000);
+        software_reset();
+    }
 }
 
 void configureButtons() {
@@ -62,11 +77,11 @@ void configureButtons() {
     configureButtonPin(BUTTON_PIN_2);
     configureButtonPin(BUTTON_PIN_3);
     configureButtonPin(BUTTON_PIN_4);
-    configureButtonPin(BUTTON_PIN_5);
+    configureButtonPin(BUTTON_PIN_RESET);
+    configureButtonPin(BUTTON_PIN_TOGGLE);
 }
 
-int main(void)
-{
+int main(void) {
     configureButtons();
 
     millis_init();
@@ -80,22 +95,28 @@ int main(void)
     lcd_puts("Coin (1,5,10,25)");
 
     while (1) {
-        if (bit_is_clear(PINB, BUTTON_PIN_1)) {
-            HandleButtonClick("1", 1);
-        }
-        if (bit_is_clear(PINB, BUTTON_PIN_2)) {
-            HandleButtonClick("2", 5);
-        }
-        if (bit_is_clear(PINB, BUTTON_PIN_3)) {
-            HandleButtonClick("3", 10);
-        }
-        if (bit_is_clear(PINB, BUTTON_PIN_4)) {
-            HandleButtonClick("4", 25);
+        if (systemOn) {
+            if (bit_is_clear(PINB, BUTTON_PIN_1)) {
+                HandleButtonClick("1", 1);
+            }
+            if (bit_is_clear(PINB, BUTTON_PIN_2)) {
+                HandleButtonClick("2", 5);
+            }
+            if (bit_is_clear(PINB, BUTTON_PIN_3)) {
+                HandleButtonClick("3", 10);
+            }
+            if (bit_is_clear(PINB, BUTTON_PIN_4)) {
+                HandleButtonClick("4", 25);
+            }
         }
 
-        if (bit_is_clear(PINB, BUTTON_PIN_5)) {
-            lcd_clear();  // Clear the LCD screen
+        if (bit_is_clear(PINB, BUTTON_PIN_RESET)) {
             software_reset();
+        }
+
+        if (bit_is_clear(PINB, BUTTON_PIN_TOGGLE)) {
+            toggle_system();
+            _delay_ms(500); // Delay to prevent immediate toggle back
         }
 
         lcd_set_cursor(0, 1);
