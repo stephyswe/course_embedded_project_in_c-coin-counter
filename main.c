@@ -70,6 +70,21 @@ void initMessage() {
     lcd_puts("Coin (1,5,10,25)");
 }
 
+void updateCoinCategory(int lastClickedCoin, int coinValues[NUM_BUTTONS], int categoryCounts[NUM_BUTTONS]) {
+    // Category index for clicked coin
+    int categoryIndex = -1;
+    for (int j = 0; j < NUM_BUTTONS; j++) {
+        if (lastClickedCoin == coinValues[j]) {
+            categoryIndex = j;
+            break;
+        }
+    }
+
+    // Update categoryCounts array
+    if (categoryIndex != -1) {
+        categoryCounts[categoryIndex] += 1;
+    }
+}
 
 void MainLoop() {
     
@@ -91,20 +106,7 @@ void MainLoop() {
                 if (bit_is_clear(PINB, BUTTON_PIN_1 + i)) {
                     HandleButtonClick(coinValues[i], &coinCount, &coinCounter, &buttonFlag, &lastCoinTime);
                      lastClickedCoin = coinValues[i];
-
-                    // category index for clicked coin
-                    int categoryIndex = -1;
-                    for (int j = 0; j < NUM_BUTTONS; j++) {
-                        if (lastClickedCoin == coinValues[j]) {
-                            categoryIndex = j;
-                            break;
-                        }
-                    }
-
-                    // Update categoryCounts array
-                    if (categoryIndex != -1) {
-                        categoryCounts[categoryIndex] += 1;
-                    }
+                    updateCoinCategory(lastClickedCoin, coinValues, categoryCounts);
                 }
             }
         }
