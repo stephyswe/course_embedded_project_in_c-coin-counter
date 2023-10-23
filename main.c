@@ -7,6 +7,7 @@
 #include "lcd.h"
 
 // header files
+#include "button.h"
 #include "system.h"
 
 #define BIT_SET(a, b) ((a) |= (1ULL << (b)))
@@ -19,23 +20,10 @@
 // D (digital pins 0 to 7)
 // https://wokwi.com/projects/379402088569472001
 
-
-#define BUTTON_PIN_1 0
-#define BUTTON_PIN_2 1
-#define BUTTON_PIN_3 2
-#define BUTTON_PIN_4 3
-#define BUTTON_PIN_RESET 4
-#define BUTTON_PIN_TOGGLE 5
-
 char currentText[5] = {0};
 int coinCounter = 0; // coin counter
 int coinCount = 0;   // num of coins
 int systemOn = 1;     // System state (1 = on, 0 = off)
-
-void configureButtonPin(uint8_t pin) {
-    DDRB &= ~(1 << pin);   // button input
-    PORTB |= (1 << pin);   // resistor on pin
-}
 
 void HandleButtonClick(char *txt, int value) {
     _delay_ms(200);
@@ -51,15 +39,6 @@ void HandleButtonClick(char *txt, int value) {
     lcd_printf("%d Coin(s)", coinCount);
     lcd_set_cursor(0, 1);
     lcd_printf("Total: %d SEK", coinCounter);
-}
-
-void configureButtons() {
-    configureButtonPin(BUTTON_PIN_1);
-    configureButtonPin(BUTTON_PIN_2);
-    configureButtonPin(BUTTON_PIN_3);
-    configureButtonPin(BUTTON_PIN_4);
-    configureButtonPin(BUTTON_PIN_RESET);
-    configureButtonPin(BUTTON_PIN_TOGGLE);
 }
 
 int main(void) {
