@@ -6,6 +6,9 @@
 #include <string.h>
 #include "lcd.h"
 
+// header files
+#include "system.h"
+
 #define BIT_SET(a, b) ((a) |= (1ULL << (b)))
 #define BIT_CLEAR(a,b) ((a) &= ~(1ULL<<(b)))
 #define BIT_FLIP(a,b) ((a) ^= (1ULL<<(b)))
@@ -48,28 +51,6 @@ void HandleButtonClick(char *txt, int value) {
     lcd_printf("%d Coin(s)", coinCount);
     lcd_set_cursor(0, 1);
     lcd_printf("Total: %d SEK", coinCounter);
-}
-
-void software_reset() {
-    lcd_clear();
-    wdt_enable(WDTO_15MS);  // Enable the Watchdog Timer with a short timeout
-    while (1);              // Wait for the watchdog timer to reset the microcontroller
-}
-
-void toggle_system() {
-    if (systemOn) {
-        systemOn = 0; // Turn off
-        lcd_clear();
-        lcd_puts("SYSTEM OFF");
-        _delay_ms(1000);
-        lcd_clear();
-    } else {
-        systemOn = 1; // Turn on
-        lcd_clear();
-        lcd_puts("SYSTEM ON");
-        _delay_ms(2000);
-        software_reset();
-    }
 }
 
 void configureButtons() {
@@ -115,7 +96,7 @@ int main(void) {
         }
 
         if (bit_is_clear(PINB, BUTTON_PIN_TOGGLE)) {
-            toggle_system();
+            toggle_system(&systemOn);
             _delay_ms(500); // Delay to prevent immediate toggle back
         }
 
