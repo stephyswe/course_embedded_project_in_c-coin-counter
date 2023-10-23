@@ -11,7 +11,7 @@ LDFLAGS=-mmcu=$(MCU)
 PORT=\\\\.\\COM3
 BIN=avrmoney
 OUT=${BIN}.hex
-SOURCES = main.c lcd.c millis.c servo.c uart.c
+SOURCES = main.c lcd.c millis.c
 
 DEBUG?=1
 
