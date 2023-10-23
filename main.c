@@ -10,14 +10,10 @@
 #define BIT_FLIP(a,b) ((a) ^= (1ULL<<(b)))
 #define BIT_CHECK(a,b) (!!((a) & (1ULL<<(b)))) 
 
-#define Set_Button_As_Input_Pullup(ddr,pdr,pin) BIT_CLEAR(ddr,pin);BIT_SET(pdr,pin);
-#define Button_Is_Clicked(pinr,pin) !BIT_CHECK(pinr,pin)
-
-
 // B (digital pin 8 to 13)
 // C (analog input pins)
 // D (digital pins 0 to 7)
-// https://wokwi.com/projects/365067824797777921
+// https://wokwi.com/projects/379402088569472001
 
 
 #define BUTTON_PIN_1 0
@@ -26,70 +22,60 @@
 #define BUTTON_PIN_4 3
 
 char currentText[5] = {0};
+int coinCounter = 0; // coin counter
+int coinCount = 0;   // num of coins
 
-void HandleButtonClick(char *txt){
+void configureButtonPin(uint8_t pin) {
+    DDRB &= ~(1 << pin);   // button input
+    PORTB |= (1 << pin);   // resistor on pin
+}
+
+void HandleButtonClick(char *txt, int value) {
     _delay_ms(200);
     strcat(currentText, txt);
-    lcd_set_cursor(0,1);
-    //lcd_puts(currentText);
-    
-    if(strlen(currentText)==4){
-        if(!strcmp("1442",currentText)){
-            lcd_printf("Correct welcome!");
-            //servo1_set_percentage(0);
-            //_delay_ms(1000);
-            servo1_set_percentage(100);
-            _delay_ms(5000);
-            servo1_set_percentage(0);
-            lcd_set_cursor(0,1);
-            lcd_puts("                ");
-            lcd_set_cursor(0,1);
-            
-        
-            //styr servo
-            //clear lcd
-        }else{
-            lcd_printf("INCORRECT CODE");
-            _delay_ms(3000);
-            lcd_set_cursor(0,1);
-            lcd_puts("               ");
-            lcd_set_cursor(0,1);
-        }
-        currentText[0] = 0;
-    }else{
-          for(int i = 0;i <strlen(currentText);i++)          
-            lcd_puts("*");
-    }
+    lcd_set_cursor(0, 1);
+
+    //lcd_clear();  // clear
+    lcd_puts(txt); // show pressed number
+    coinCounter += value; // Increment sum
+    coinCount++;          // Increment number
+    lcd_set_cursor(0, 0);
+    lcd_printf("%d Coin(s)", coinCount);
+    lcd_set_cursor(0, 1);
+    lcd_printf("Total: %d SEK", coinCounter);
 }
 
 int main(void)
 {
-    Set_Button_As_Input_Pullup(DDRB, PORTB, BUTTON_PIN_1);
-    Set_Button_As_Input_Pullup(DDRB, PORTB, BUTTON_PIN_2);
-    Set_Button_As_Input_Pullup(DDRB, PORTB, BUTTON_PIN_3);
-    Set_Button_As_Input_Pullup(DDRB, PORTB, BUTTON_PIN_4);
+    configureButtonPin(BUTTON_PIN_1);
+    configureButtonPin(BUTTON_PIN_2);
+    configureButtonPin(BUTTON_PIN_3);
+    configureButtonPin(BUTTON_PIN_4);
 
 
     millis_init();
     sei();
-    init_servo();
 
-    //servo1_set_percentage(100);
-    //servo1_set_percentage(0);
-    //_delay_ms(5000);
     lcd_init();
     lcd_enable_blinking();
     lcd_enable_cursor();
-    //printf("TEST");
+    lcd_puts("Money box:");
 
-    
-    lcd_puts("Skriv in koden:");
+    while (1) {
+        if (bit_is_clear(PINB, BUTTON_PIN_1)) {
+            HandleButtonClick("1", 1);
+        }
+        if (bit_is_clear(PINB, BUTTON_PIN_2)) {
+            HandleButtonClick("2", 5);
+        }
+        if (bit_is_clear(PINB, BUTTON_PIN_3)) {
+            HandleButtonClick("3", 10);
+        }
+        if (bit_is_clear(PINB, BUTTON_PIN_4)) {
+            HandleButtonClick("4", 25);
+        }
 
-    while(1) {
-        if(Button_Is_Clicked(PINB,BUTTON_PIN_1)) HandleButtonClick("1");
-        if(Button_Is_Clicked(PINB,BUTTON_PIN_2)) HandleButtonClick("2");
-        if(Button_Is_Clicked(PINB,BUTTON_PIN_3)) HandleButtonClick("3");
-        if(Button_Is_Clicked(PINB,BUTTON_PIN_4)) HandleButtonClick("4");
+        lcd_set_cursor(0, 1);
     }
     return 0;
 }
