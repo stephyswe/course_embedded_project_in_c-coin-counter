@@ -12,6 +12,7 @@
 // header files
 #include "button.h"
 #include "system.h"
+#include "message.h"
 
 // Function to handle button click
 void button_click(int value, int* coinCount, int* coinCounter,
@@ -80,12 +81,6 @@ void initialize_hardware() {
   sei();
   lcd_init();
   lcd_enable_cursor();
-}
-
-void initialize_message() {
-  lcd_puts("Money box:");
-  lcd_set_cursor(0, 1);
-  lcd_puts("Coin (1,5,10,25)");
 }
 
 void main_loop() {

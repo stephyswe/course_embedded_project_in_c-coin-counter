@@ -3,6 +3,7 @@
 #include <util/delay.h>
 
 #include "lcd.h"
+#include "message.h"
 
 void system_reset() {
   lcd_clear();
@@ -23,6 +24,7 @@ void system_toggle(int* systemOn) {
     lcd_clear();
     lcd_puts("SYSTEM ON");
     _delay_ms(2000);
-    system_reset();
+    lcd_clear();
+    initialize_message();
   }
 }
