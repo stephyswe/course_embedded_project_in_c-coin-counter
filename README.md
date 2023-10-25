@@ -1,5 +1,8 @@
 # MyntRaknare
 
+## Presentation
+There's a presentation.mp4 file that shows the project running in wokwi with hardware configuration & code example.
+
 ## Beskrivning
 Programmet "MyntRäknaren" ger användaren information om mynten i deras sparbössa. 4 mynt tillåts - enkronor, femkronor, tiokronor och tjugofemkronor. Efter varje mynt visas en total summa av pengarna, antalet mynt och statistik om myntvarianterna. Finns även möjlighet att återställa räknaren till noll, exempelvis om ägaren byts och på/av funktioner. 
 
