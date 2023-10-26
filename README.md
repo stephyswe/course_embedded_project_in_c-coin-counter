@@ -1,4 +1,4 @@
-# MyntRaknare
+# MyntRaknare med Buzzer ljud (Ren C kod)
 
 ## Installation
 Klona repo "git clone" till hårddisk. Öppna projekt i VSCODE från hårddisk med "code .". Skapa en .hex
