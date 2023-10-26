@@ -35,6 +35,7 @@ Main_loop() ansvarar att övervaka knapptryckningar. Knapparna 1-4 lägger till 
 * main     - huvudfunktion
 * system.c - systemrelaterade funktioner
 * button.c - hantering av knappar
+* message.c - input meddelande
 
 * clang-format - formattering
 * Makefile
