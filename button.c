@@ -3,14 +3,13 @@
 
 // config files
 #include "lcd.h"
+#include "millis.h"
 
 // define file
 #include "define.h"
 
 // header files
 #include "button.h"
-#include "millis.h"
-
 
 void button_pin(uint8_t pin) {
   DDRB &= ~(1 << pin);  // button input
