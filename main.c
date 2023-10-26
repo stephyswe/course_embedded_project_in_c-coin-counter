@@ -11,14 +11,10 @@
 #include "define.h"
 
 // header files
+#include "audio_buzzer.h"
 #include "button.h"
 #include "message.h"
 #include "system.h"
-#include "audio_buzzer.h"
-
-static void t0_set_prescaler(enum t0_prescaler ps) {
-  TCCR0B = ps;
-}
 
 static unsigned short t0_get_prescaler_rate(enum t0_prescaler ps) {
   unsigned short rate;

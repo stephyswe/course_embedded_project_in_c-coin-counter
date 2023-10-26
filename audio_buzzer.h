@@ -9,4 +9,6 @@ enum t0_prescaler {
   T0_PRESCALER_1024 = _BV(CS02) | _BV(CS00),
 };
 
+void t0_set_prescaler(enum t0_prescaler ps);
+
 #endif
