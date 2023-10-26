@@ -1,7 +1,7 @@
 # MyntRaknare
 
 ## Presentation
-There's a presentation.mp4 file that shows the project running in wokwi with hardware configuration & code example.
+Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivning och kodexempel
 
 ## Ritningar
 
@@ -9,18 +9,20 @@ There's a presentation.mp4 file that shows the project running in wokwi with har
 ![Added Coin](https://i.imgur.com/KVUgFtc.png)
 ![Coin Statistics](https://i.imgur.com/NNJVcug.png)
 
-### Hardware
+## Hårvara och Stift anslutningar
 
-| Item             | Quantity | Notes                        |
+### Hårdvara
+
+| Enhet            | Antal    | Anteckningar
 | ---------------- | -------- | ---------------------------- |
 | Arduino Uno R3   | 1        |                              |
 | 12mm Push button | 6        | Yellow, Gold, Green, Gray    |
 | 16x02 LCD Monitor| 1        |                              |
 
 
-### Pin Connections
+### Stift anslutningar
 
-| Arduino Pin | Device       |
+| Arduino Pin | Enhet        |
 | ----------- | -------------|
 | GND         | LCD 05 (RW)  |
 | GND         | LCD 01 (VS)  |
@@ -38,7 +40,6 @@ There's a presentation.mp4 file that shows the project running in wokwi with har
 | 0           | LCD 04 (RS)  |
 | 5V          | LCD 02 (SVD) |
 
-## Hårvara och Pin-connections
 
 ## Beskrivning
 Programmet "MyntRäknaren" ger användaren information om mynten i deras sparbössa. 4 mynt tillåts - enkronor, femkronor, tiokronor och tjugofemkronor. Efter varje mynt visas en total summa av pengarna, antalet mynt och statistik om myntvarianterna. Finns även möjlighet att återställa räknaren till noll, exempelvis om ägaren byts och på/av funktioner. 
