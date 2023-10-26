@@ -31,3 +31,7 @@ unsigned short t0_get_prescaler_rate(enum t0_prescaler ps) {
   }
   return rate;
 }
+
+unsigned long div_round(unsigned long d, unsigned long q) {
+  return (d + (q / 2)) / q;
+}

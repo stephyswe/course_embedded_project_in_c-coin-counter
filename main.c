@@ -18,9 +18,7 @@
 
 
 
-static unsigned long div_round(unsigned long d, unsigned long q) {
-  return (d + (q / 2)) / q;
-}
+
 
 static void t0_set_ctc_a(unsigned long hz, unsigned long timer_freq) {
   OCR0A = div_round(timer_freq, hz * 2) - 1;
