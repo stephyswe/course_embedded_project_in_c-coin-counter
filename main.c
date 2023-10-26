@@ -14,14 +14,7 @@
 #include "button.h"
 #include "message.h"
 #include "system.h"
-
-enum t0_prescaler {
-  T0_PRESCALER_1 = _BV(CS00),
-  T0_PRESCALER_8 = _BV(CS01),
-  T0_PRESCALER_64 = _BV(CS00) | _BV(CS01),
-  T0_PRESCALER_256 = _BV(CS02),
-  T0_PRESCALER_1024 = _BV(CS02) | _BV(CS00),
-};
+#include "audio_buzzer.h"
 
 static void t0_set_prescaler(enum t0_prescaler ps) {
   TCCR0B = ps;
