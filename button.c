@@ -1,6 +1,7 @@
 #include <avr/io.h>
 
 #include "button.h"
+#include "define.h"
 
 void button_pin(uint8_t pin) {
   DDRB &= ~(1 << pin);  // button input
