@@ -1,5 +1,11 @@
 # MyntRaknare
 
+## Installation
+Klona repo "git clone" till hårddisk. Öppna projekt i VSCODE från hårddisk med "code .". Skapa en .hex
+file genom att klicka på "Makefile" tillägg och "Run" ikonen. Efter .hex fil är skapat öppna 
+en webbläsare till wokwi länk, tryck "cancel", tryck sedan "F1" för menu och välj "upload firmware 
+and start simulation".
+
 ## Presentation
 Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivning och kodexempel
 
