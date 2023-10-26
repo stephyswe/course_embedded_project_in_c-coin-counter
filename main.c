@@ -12,23 +12,6 @@
 #include "message.h"
 #include "system.h"
 
-void update_coin_category(int lastClickedCoin, int coinValues[NUM_BUTTONS],
-                          int categoryCounts[NUM_BUTTONS]) {
-  // Category index for clicked coin
-  int categoryIndex = -1;
-  for (int j = 0; j < NUM_BUTTONS; j++) {
-    if (lastClickedCoin == coinValues[j]) {
-      categoryIndex = j;
-      break;
-    }
-  }
-
-  // Update categoryCounts array
-  if (categoryIndex != -1) {
-    categoryCounts[categoryIndex] += 1;
-  }
-}
-
 // Initialize hardware and peripherals
 void initialize_hardware() {
   button_configuration();
@@ -41,15 +24,14 @@ void initialize_hardware() {
 void main_loop() {
 
   // ** variables
-  int systemOn = 1;                          // system state { 0 - off, 1 - on }
-  int coinTotalValue = 0;                    // value of coins
-  int coinQuantity = 0;                      // num of coins
-  int coinQuantityCount[NUM_BUTTONS] = {0};  // num of coin variants
-  int coinValues[NUM_BUTTONS] = {1, 5, 10,
-                                 25};  // pre-defined value of coin category
-  int lastClickedCoin = -1;            // -
-  uint32_t lastCoinTime = millis();    // time of last coin press
-  int buttonFlag = 1;                  // flag on button click
+  int systemOn = 1;                               // system state { 0 - off, 1 - on }
+  int coinTotalValue = 0;                         // value of coins
+  int coinQuantity = 0;                           // num of coins
+  int coinQuantityCount[NUM_BUTTONS] = {0};       // num of coin variants
+  int coinValues[NUM_BUTTONS] = {1, 5, 10, 25};   // pre-defined value of coin category
+  int lastClickedCoin = -1;                       // -
+  uint32_t lastCoinTime = millis();               // time of last coin press
+  int buttonFlag = 1;                             // flag on button click
 
   while (1) {
     if (systemOn) {

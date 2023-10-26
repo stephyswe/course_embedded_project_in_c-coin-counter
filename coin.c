@@ -5,6 +5,22 @@
 // header files
 #include "define.h"
 
+void update_coin_category(int lastClickedCoin, int coinValues[NUM_BUTTONS], int categoryCounts[NUM_BUTTONS]) {
+  // Category index for clicked coin
+  int categoryIndex = -1;
+  for (int j = 0; j < NUM_BUTTONS; j++) {
+    if (lastClickedCoin == coinValues[j]) {
+      categoryIndex = j;
+      break;
+    }
+  }
+
+  // Update categoryCounts array
+  if (categoryIndex != -1) {
+    categoryCounts[categoryIndex] += 1;
+  }
+}
+
 void get_coin_category(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
                   int* buttonFlag, uint32_t* lastCoinTime) {
   uint32_t currentTime = millis();
