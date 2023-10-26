@@ -11,9 +11,9 @@ Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivn
 
 ## Ritningar
 
-![MoneyBox for Arduino Uno](https://i.imgur.com/YyqhGZ6.png)
-![Added Coin](https://i.imgur.com/KVUgFtc.png)
-![Coin Statistics](https://i.imgur.com/NNJVcug.png)
+![MoneyBox for Arduino Uno](https://raw.githubusercontent.com/stephyswe/course_embedded_project_in_c-coin-counter/main/images/front.png)
+![Added Coin](https://raw.githubusercontent.com/stephyswe/course_embedded_project_in_c-coin-counter/main/images/lcd-4coin-screen-total.png)
+![Coin Statistics](https://raw.githubusercontent.com/stephyswe/course_embedded_project_in_c-coin-counter/main/images/lcd-4coin-screen-category.png)
 
 ## Hårvara och Stift anslutningar
 
