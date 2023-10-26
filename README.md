@@ -6,7 +6,7 @@ file genom att klicka på "Makefile" tillägg och "Run" ikonen. Efter .hex fil �
 en webbläsare till wokwi länk, tryck "cancel", tryck sedan "F1" för menu och välj "upload firmware 
 and start simulation".
 
-## Presentation
+## Presentation (version without buzzer)
 Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivning och kodexempel
 
 ## Ritningar
@@ -24,6 +24,7 @@ Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivn
 | Arduino Uno R3   | 1        |                              |
 | 12mm Push button | 6        | Yellow, Gold, Green, Gray    |
 | 16x02 LCD Monitor| 1        |                              |
+| Buzzer           | 1        | Volume 0.02 (diagram.json)   |
 
 
 ### Stift anslutningar
@@ -32,6 +33,7 @@ Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivn
 | ----------- | -------------|
 | GND         | LCD 05 (RW)  |
 | GND         | LCD 01 (VS)  |
+| GND         | Buzzer (1)   |
 | 13          | Button Toggle|
 | 12          | Button Reset |
 | 11          | Button 25    |
@@ -40,6 +42,7 @@ Presentationsfil presentation.mp4 visar projektet som körs i wokwi med beskrivn
 | 8           | Button 01    |
 | 7           | LCD 14 (D7)  |
 | 6           | LCD 13 (D6)  |
+| 6           | Buzzer (2)   |
 | 5           | LCD 12 (D5)  |
 | 4           | LCD 11 (D4)  |
 | 1           | LCD 06 (E)   |
@@ -68,18 +71,23 @@ Framtida utökningar:
 Användaren väljer en av fyra knappar som motsvarar olika myntvärden för att lägga till mynt i räknaren. Efter varje mynttillägg visas relevant information och statistik efter en kort fördröjning. Dessutom finns det knappar för återställning och inaktivering av systemet 
 
 ## Programmet
-Programmet börjar i main() med två funktioner: initialize_hardware() och initialize_message(). Här påbörjas programmet med startmeddelande och initialiserar nödvändig hårdvara.
+Programmet börjar i main() med tre funktioner: play_sound_intro(), initialize_hardware() och initialize_message(). Här påbörjas programmet med startmeddelande och initialiserar nödvändig hårdvara.
 
-Main_loop() ansvarar att övervaka knapptryckningar. Knapparna 1-4 lägger till olika mynt via button_click() och update_coin_category(), knapp 5 för återställning via system_reset() och knapp 6 kör system_toggle() som aktivera eller inaktivera systemet. Efter ett mynt valts presenteras beloppet, antalet mynt i sparbössan och 4 sekudner senare med en millis funktion visas hur många mynt per kategori.
+Main_loop() ansvarar att övervaka knapptryckningar. Knapparna 1-4 lägger till olika mynt via button_click() och update_coin_category(), knapp 5 för återställning via system_reset() och knapp 6 kör system_toggle() som aktivera eller inaktivera systemet. Efter ett mynt valts presenteras beloppet, antalet mynt i sparbössan och 4 sekunder senare med en millis funktion visas hur många mynt per kategori. Ljud spelas vid mynt klick.
 
 ### Filer
+
+* images/        - tre bilder av systemet 
+
 * lcd.c (obl.)   - LCD skärm
 * millis.c (obl) - tidhantering
 
-* main     - huvudfunktion
-* system.c - systemrelaterade funktioner
-* button.c - hantering av knappar
-* message.c - input meddelande
+* main            - huvudfunktion
+* audio_buzzer.c  - källa (https://balau82.wordpress.com/2014/10/15/using-a-buzzer-with-arduino-in-pure-c/)
+* system.c        - systemrelaterade funktioner
+* button.c        - hantering av knappar
+* coin.c          - hantering av mynt
+* message.c       - input meddelande
 
 * clang-format - formattering
 * Makefile
