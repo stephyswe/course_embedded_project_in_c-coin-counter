@@ -36,7 +36,7 @@ void get_coin_category(int categoryCounts[NUM_BUTTONS], int lastClickedCoin,
       lcd_set_cursor(0, 1);
       lcd_printf("C: %d / D: %d", categoryCounts[2], categoryCounts[3]);
     } else {
-      lcd_printf("User None");  // No coin clicked
+      lcd_printf("Category not found");  // No coin clicked
     }
     *buttonFlag = 1;  // Set the flag
   }
