@@ -16,16 +16,6 @@
 #include "message.h"
 #include "system.h"
 
-
-
-
-
-static void t0_set_ctc_a(unsigned long hz, unsigned long timer_freq) {
-  OCR0A = div_round(timer_freq, hz * 2) - 1;
-  TCCR0A = _BV(COM0A0)    // toggle
-           | _BV(WGM01);  // CTC
-}
-
 // Initialize hardware and peripherals
 void initialize_hardware() {
   button_configuration();

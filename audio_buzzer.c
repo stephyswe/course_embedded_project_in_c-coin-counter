@@ -35,3 +35,9 @@ unsigned short t0_get_prescaler_rate(enum t0_prescaler ps) {
 unsigned long div_round(unsigned long d, unsigned long q) {
   return (d + (q / 2)) / q;
 }
+
+void t0_set_ctc_a(unsigned long hz, unsigned long timer_freq) {
+  OCR0A = div_round(timer_freq, hz * 2) - 1;
+  TCCR0A = _BV(COM0A0)    // toggle
+           | _BV(WGM01);  // CTC
+}

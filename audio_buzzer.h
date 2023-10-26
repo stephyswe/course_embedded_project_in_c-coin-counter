@@ -12,5 +12,6 @@ enum t0_prescaler {
 void t0_set_prescaler(enum t0_prescaler ps);
 unsigned short t0_get_prescaler_rate(enum t0_prescaler ps);
 unsigned long div_round(unsigned long d, unsigned long q);
+void t0_set_ctc_a(unsigned long hz, unsigned long timer_freq);
 
 #endif
